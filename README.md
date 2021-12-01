@@ -3,7 +3,9 @@
 IT 325 – Web Development Project 2 “End Game”
 
 Deploy my game in Heroku:
+
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/mirandarcospin/socketio-mxr17e-endgame)
+
 
 The Assignment:
 Create a real-time multiplayer game!  Your project must include the following:
