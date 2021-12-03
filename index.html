@@ -414,6 +414,11 @@
     games = 1;
     play();
 
+    socket.on('game message', function(p1Points,p2Points) {
+      p1Points.appendChild(p1Points);
+      p2Points.appendChild(p2Points);
+    });
+    
      // For next player - next game
     document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
