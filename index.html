@@ -414,19 +414,22 @@
     games = 1;
     play();
 
-    socket.on('game message', function(p1Points,p2Points) {
-      p1Points.appendChild(p1Points);
-      p2Points.appendChild(p2Points);
+   var socket = io();
+
+   socket.on('game message', function(points1,points2) {
+      p1Points.appendChild(points1);
+      p2Points.appendChild(points2);
     });
-    
+
      // For next player - next game
-    document.getElementById('reset').onclick = function() {
+   document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
       letters.parentNode.removeChild(letters);
       context.clearRect(0, 0, 400, 400);
       answerGameOver.innerHTML = null;
-      //p1Points.innerHTML = p1;
-      //p2Points.innerHTML = p2;
+      socket.emit('game message', p1, p2);
+      // p1Points.innerHTML = p1;
+      // p2Points.innerHTML = p2;
       games = games + 1;
       play();
     }
