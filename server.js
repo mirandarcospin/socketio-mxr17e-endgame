@@ -8,8 +8,8 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  socket.on('game message', p1Points,p2Points => {
-    io.emit('game message', p1Points,p2Points);
+  socket.on('game message', points1,points2 => {
+    io.emit('game message', points1,points2);
   });
 });
 
