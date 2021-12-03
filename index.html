@@ -414,15 +414,10 @@
     games = 1;
     play();
 
-   var socket = io();
-
-   socket.on('game message', function(points1,points2) {
-      p1Points.appendChild(points1);
-      p2Points.appendChild(points2);
-    });
+    var socket = io();
 
      // For next player - next game
-   document.getElementById('reset').onclick = function() {
+    document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
       letters.parentNode.removeChild(letters);
       context.clearRect(0, 0, 400, 400);
@@ -433,5 +428,10 @@
       games = games + 1;
       play();
     }
+
+    socket.on('game message', function(points1,points2) {
+      p1Points.innerHTML = points1;
+      p2Points.innerHTML = points2;
+    });
   </script>
 </div>
