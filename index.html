@@ -415,24 +415,27 @@
     //   play();
     // }
 
-    var socket = io;
+    var socket = io();
+     // For next player - next game
+    document.getElementById('reset').onclick = function() {
+      correct.parentNode.removeChild(correct);
+      letters.parentNode.removeChild(letters);
+      context.clearRect(0, 0, 400, 400);
+      answerGameOver.innerHTML = null;
+      socket.emit('gameHangmanP1', p1);
+      // p1Points.innerHTML = p1;
+      socket.emit('gameHangmanP2', p2);
+      // p2Points.innerHTML = p2;
+      games = games + 1;
+      play();
+    }
 
-    form.addEventListener('reset', function(e) {
-      e.preventDefault();
-      socket.emit('gameHangman', {
-        correct.parentNode.removeChild(correct);
-        letters.parentNode.removeChild(letters);
-        context.clearRect(0, 0, 400, 400);
-        answerGameOver.innerHTML = null;
-        p1Points.innerHTML = p1;
-        p2Points.innerHTML = p2;
-        games = games + 1;
-        play();
-      });
+    socket.on('gameHangmanP1', function(x) {
+      p1Points.appendChild(x);
     });
 
-    socket.on('gameHangman', (data) => {
-      io.emit('gameHangman', data);
+    socket.on('gameHangmanP2', function(x) {
+      p2Points.appendChild(x);
     });
 
   </script>
