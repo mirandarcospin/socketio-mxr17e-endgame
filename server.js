@@ -8,15 +8,10 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-	console.log('A user just connected.');
-    socket.on('disconnect', () => {
-        console.log('A user has disconnected.');
-    })
+  socket.on('startGame', (data) => {
+  	io.emit('startGame', data);
+  })
 });
-
-io.on('startGame', (data) => {
-	io.emit('startGame', data);
-})
 
 http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
