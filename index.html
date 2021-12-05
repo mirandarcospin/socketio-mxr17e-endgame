@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<div>
+  <head>
+    <title>Hangman Game</title>
+    <style>
+      canvas{
+        color: white;
+        border: black dashed 2px;
+        padding: 15px;
+      }
+
+      body {
+        background: #069496;
+        font-family: Arial;
+        color: white;
+        height: 100%;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .elementsDiv{
+        @include clear;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      @mixin clear {
+        &: after {
+            content: "";
+            display: table;
+            clear: both;
+          }
+      }
+
+      h1, h2, h3 {
+        font-family: Arial;
+        font-weight: 100;
+        margin: 5px 0;
+      }
+
+      h1 {
+        font-size: 4em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        color: black;
+      }
+
+      h3 {
+        font-size: 1em;
+        color: white;
+      }
+
+      p{
+        font-size: 1em;
+      }
+
+      #alphabet {
+        @include clear;
+        margin: 15px auto;
+        padding: 0;
+        max-width: 900px;
+      }
+
+      #alphabet li {
+        float: left;
+        margin: 0 10px 10px 0;
+        list-style: none;
+        width: 35px;
+        height: 30px;
+        padding-top: 10px;
+        background: white;
+        color: #069496;
+        cursor: pointer;
+
+        border: solid 1px white;
+      }
+
+      #my-word {
+        margin: 0;
+        display: block;
+        padding: 0;
+      }
+
+      #my-word li {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        display: inline-block;
+        padding: 0 10px;
+        font-size: 1.6em;
+      }
+
+      .active {
+        cursor: default;
+      }
+
+      #mylives{
+        font-size: 1.6em;
+        text-align: center;
+        display: block;
+      }
+
+      button{
+        background: #069496;
+        color: white;
+        border: solid 1px white;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 1.2em;
+        padding: 18px 10px;
+        width: 180px;
+        margin: 10px;
+        outline: none;
+      }
+
+      @media (max-width: 767px) {
+        #alphabet {
+        padding: 0 0 0 15px;
+      }
+        }
+
+        @media (max-width: 480px) {
+        #alphabet {
+        padding: 0 0 0 25px;
+      }
+        }
+
+      /* Style the side navigation */
+      .sidenav {
+        height: 100%;
+        width: 300px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
+        outline: 5px dashed black;
+      }
+
+      /* Side navigation links */
+      .sidenav a {
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      /* Style the content */
+      .content {
+        margin-left: 200px;
+        padding-left: 20px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <div class="content">
+    <h1>HANGMAN</h1>
+    <hr />
+    <hr />
+  </div>
+  <div class="sidenav">
+    <br>
+    <h2><a id="score" style="color: #069496;">SCORE</a></h2>
+    <br><br>
+    <a id="player1">PLAYER 1</a><p id="pl1" style="color: black;">0</p>
+    <hr />
+    <a id="player2">PLAYER 2</a><p id="pl2" style="color: black;">0</p>
+  </div>
+
+  <div class="elementsDiv">
+      <div class="content">
+        <h3>HINT - Categories: Animals, Food, Countries</<h3>
+      </div>
+      <br>
+      <div class="content">
+        <div id="buttons"></div>
+        <br></br><br>
+      </div>
+      <div class="content">
+        <br></br>
+        <div id="hold"></div>
+        <p id="correctAns"></p>
+        <br>
+        <canvas id="stickman"></canvas>
+        <h2 id="stickmanLives"></h2>
+      </div>
+      <div class="content">
+        <br><button id="reset">Next Player</button>
+      </div>
+  </div>
+
+  <script>
+    var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+    var socket = io();
+
+    var word; // Selected word
+    var guess; // Geuss
+    var storedGuess = [ ]; // Stored storedGuess
+    var lives; // Lives
+    var counter; // Count correct storedGuess
+    var space; // Number of spaces in word '-'
+    var games; //Amount of games played
+    var points; //Amount of points to be earned
+    var p1; //Player 1
+    var p2; //Player 2
+
+    // Get elements
+    var showLives = document.getElementById("stickmanLives");
+    var answerGameOver = document.getElementById("correctAns");
+    var p2Points = document.getElementById("pl2"); //Display player 2 points
+    var p1Points = document.getElementById("pl1"); //Display player 1 points
+
+    // create alphabet ul
+    var buttons = function () {
+      myButtons = document.getElementById('buttons');
+      letters = document.createElement('ul');
+
+      for (var i = 0; i < alphabet.length; i++) {
+        letters.id = 'alphabet';
+        list = document.createElement('li');
+        list.id = 'letter';
+        list.innerHTML = alphabet[i];
+        check();
+        myButtons.appendChild(letters);
+        letters.appendChild(list);
+      }
+    }
+
+    // Create storedGuess ul
+     result = function () {
+      wordHolder = document.getElementById('hold');
+      correct = document.createElement('ul');
+
+      for (var i = 0; i < word.length; i++) {
+        correct.setAttribute('id', 'my-word');
+        guess = document.createElement('li');
+        guess.setAttribute('class', 'guess');
+        if (word[i] === "-") {
+          guess.innerHTML = "-";
+          space = 1;
+        } else {
+          guess.innerHTML = "_";
+        }
+
+        storedGuess.push(guess);
+        wordHolder.appendChild(correct);
+        correct.appendChild(guess);
+      }
+    }
+
+    // Show lives
+     comments = function () {
+      showLives.innerHTML = "You have " + lives + " lives";
+      if (lives < 1) {
+        showLives.innerHTML = "Game Over";
+        answerGameOver.innerHTML = "Answer: " + word;
+      }
+      for (var i = 0; i < storedGuess.length; i++) {
+        if (counter + space === storedGuess.length) {
+          showLives.innerHTML = "You Win!";
+        }
+      }
+      if(showLives.innerHTML == "You Win!"){
+        points = 1;
+        if(games % 2 == 0) {
+          p2 = p2 + points;
+        }
+        else {
+          p1 = p1 + points;
+        }
+      }
+      else if(showLives.innerHTML == "Game Over"){
+        points = 0;
+        if(games % 2 == 0) {
+          p2 = p2 + points;
+        }
+        else {
+          p1 = p1 + points;
+        }
+      }
+    }
+        // Animate man
+    var animate = function () {
+      var drawMe = lives ;
+      drawArray[drawMe]();
+    }
+
+     // Hangman
+    canvas =  function(){
+      myStickman = document.getElementById("stickman");
+      context = myStickman.getContext('2d');
+      context.beginPath();
+      context.strokeStyle = "#fff";
+      context.lineWidth = 2;
+      for(var i = 1; i < 5; i++){
+        drawArray[(lives+4)-i]();
+      }
+    };
+
+      head = function(){
+        myStickman = document.getElementById("stickman");
+        context = myStickman.getContext('2d');
+        context.beginPath();
+        context.arc(60, 25, 10, 0, Math.PI*2, true);
+        context.stroke();
+      }
+
+    draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
+
+      context.moveTo($pathFromx, $pathFromy);
+      context.lineTo($pathTox, $pathToy);
+      context.stroke();
+    }
+
+     frame1 = function() {
+       draw (0, 150, 150, 150);
+     };
+
+     frame2 = function() {
+       draw (10, 0, 10, 600);
+     };
+
+     frame3 = function() {
+       draw (0, 5, 70, 5);
+     };
+
+     frame4 = function() {
+       draw (60, 5, 60, 15);
+     };
+
+     torso = function() {
+       draw (60, 36, 60, 70);
+     };
+
+     rightArm = function() {
+       draw (60, 46, 100, 50);
+     };
+
+     leftArm = function() {
+       draw (60, 46, 20, 50);
+     };
+
+     rightLeg = function() {
+       draw (60, 70, 100, 100);
+     };
+
+     leftLeg = function() {
+       draw (60, 70, 20, 100);
+     };
+    drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head, frame4, frame3, frame2, frame1];
+
+    // OnClick Function
+     check = function () {
+      list.onclick = function () {
+        var geuss = (this.innerHTML);
+        this.setAttribute("class", "active");
+        this.onclick = null;
+        for (var i = 0; i < word.length; i++) {
+          if (word[i] === geuss) {
+            storedGuess[i].innerHTML = geuss;
+            counter += 1;
+          }
+        }
+        var j = (word.indexOf(geuss));
+        if (j === -1) {
+          lives -= 1;
+          comments();
+          animate();
+        } else {
+          comments();
+        }
+      }
+    }
+
+    // Play the game
+    play = function () {
+      categories = [
+          ["cat", "cow", "dog", "horses", "rat", "fish", "rabbit"],
+          ["hamburger", "tacos", "nachos", "hot-dog", "chicken"],
+          ["honduras", "italy", "guatemala", "brazil", "canada"]
+      ];
+
+      chosenWord = categories[Math.floor(Math.random() * categories.length)];
+      word = chosenWord[Math.floor(Math.random() * chosenWord.length)];
+      word = word.replace(/\s/g, "-");
+      console.log(word);
+      buttons();
+
+      storedGuess = [ ];
+      lives = 6;
+      counter = 0;
+      space = 0;
+      points = 0;
+      result();
+      comments();
+      canvas();
+    }
+    p1 = 0;
+    p2 = 0;
+    games = 1;
+    play();
+
+     // For next player - next game
+    // document.getElementById('reset').onclick = function() {
+    //   correct.parentNode.removeChild(correct);
+    //   letters.parentNode.removeChild(letters);
+    //   context.clearRect(0, 0, 400, 400);
+    //   answerGameOver.innerHTML = null;
+    //   p1Points.innerHTML = p1;
+    //   p2Points.innerHTML = p2;
+    //   games = games + 1;
+    //   play();
+    // }
+    document.getElementById('reset').onclick = function() => {
+      correct.parentNode.removeChild(correct);
+      letters.parentNode.removeChild(letters);
+      context.clearRect(0, 0, 400, 400);
+      answerGameOver.innerHTML = null;
+      p1Points.innerHTML = p1;
+      p2Points.innerHTML = p2;
+      games = games + 1;
+      play();
+    }
+
+    let testButton = document.getElementById('reset');
+    testButton.addEventListener('click', () => {
+      socket.emit('startGame', {
+        correct.parentNode.removeChild(correct),
+        letters.parentNode.removeChild(letters),
+        context.clearRect(0, 0, 400, 400),
+        answerGameOver.innerHTML = null,
+        p1Points.innerHTML = p1,
+        p2Points.innerHTML = p2,
+        games = games + 1,
+        play()
+      });
+    })
+    
+  </script>
+</div>
