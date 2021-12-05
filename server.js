@@ -7,12 +7,6 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', (socket) => {
-  socket.on('startGame', (data) => {
-  	io.emit('startGame', data);
-  })
-});
-
 http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
 });
