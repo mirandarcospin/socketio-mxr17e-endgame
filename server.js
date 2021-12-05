@@ -8,8 +8,12 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  socket.on('gameHangman', (data) => {
-    io.emit('gameHangman', data);
+  socket.on('gameHangmanP1', (data) => {
+    io.emit('gameHangmanp1', data);
+  });
+
+  socket.on('gameHangmanP2', (data) => {
+    io.emit('gameHangmanP2', data);
   });
 });
 
