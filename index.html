@@ -406,9 +406,9 @@
     p1 = 0;
     p2 = 0;
     games = 1;
+    play();
+    
     var socket = io();
-    socket.emit('gamePlay');
-    // play();
 
      // For next player - next game
     document.getElementById('reset').onclick = function() {
