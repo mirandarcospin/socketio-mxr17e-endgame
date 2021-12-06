@@ -7,10 +7,17 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+var roomno = 1;
+var count = 0;
 io.on('connection', function(socket){
-   console.log('A user connected');
+  if(count < 2) {
+    socket.join(roomno);
+    io.sockets.in(roomno).emit('connectToRoom', roomno);
+    count = count + 1;
+  }
    socket.on('disconnect', function () {
-      console.log('A user disconnected');
+     socket.leave(roomno);
+     count = count - 1;
    });
 });
 
