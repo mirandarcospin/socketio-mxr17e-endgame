@@ -409,17 +409,45 @@
     play();
 
     // For next player - next game
+//     document.getElementById('reset').onclick = function() {
+//       correct.parentNode.removeChild(correct);
+//       letters.parentNode.removeChild(letters);
+//       context.clearRect(0, 0, 400, 400);
+//       answerGameOver.innerHTML = null;
+//       p1Points.innerHTML = p1;
+//       p2Points.innerHTML = p2;
+//       games = games + 1;
+//       gamePoints.innerHTML = games;
+//       play();
+//     }
+    
+    var socket = io();
+
+    // For next player - next game
     document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
       letters.parentNode.removeChild(letters);
       context.clearRect(0, 0, 400, 400);
       answerGameOver.innerHTML = null;
-      p1Points.innerHTML = p1;
-      p2Points.innerHTML = p2;
+      // p1Points.innerHTML = p1;
+      socket.emit('player1Points', p1);
+      // p2Points.innerHTML = p2;
+      socket.emit('player2Points', p2);
       games = games + 1;
-      gamePoints.innerHTML = games;
+      // gamePoints.innerHTML = games;
+      socket.emit('gamePoints', games);
       play();
     }
+
+    socket.on('player1Points',(x) => {
+      p1Points.innerHTML = x;
+    });
+    socket.on('player2Points',(x) => {
+      p2Points.innerHTML = x;
+    });
+    socket.on('gamePoints',(x) => {
+      gamePoints.innerHTML = x;
+    });
     
   </script>
 </div>
