@@ -7,18 +7,13 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-var roomno = 1;
-var count = 0;
-io.on('connection', function(socket){
-  if(count < 2) {
-    socket.join(roomno);
-    io.sockets.in(roomno).emit('connectToRoom', roomno);
-    count = count + 1;
-  }
-   socket.on('disconnect', function () {
-     socket.leave(roomno);
-     count = count - 1;
-   });
+var players = new Map();
+var playerID = 0;
+io.on('connection', (socket) => {
+  playerID += 1;
+  console.log('Socket onnection ' + socket.id + ' and Player # ' + playerID);
+  players.set(socket.id, playerID);
+  socket.emit('forID', playerID);
 });
 
 http.listen(port, () => {
