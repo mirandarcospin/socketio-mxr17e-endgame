@@ -420,8 +420,10 @@
 //       gamePoints.innerHTML = games;
 //       play();
 //     }
-    
-    const io = require('socket.io');
+
+    const app = require('express')();
+    const http = require('http').Server(app);
+    const io = require('socket.io')(http);
     var socket = io();
     // For next player - next game
     document.getElementById('reset').onclick = function() {
