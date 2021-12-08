@@ -219,6 +219,9 @@
     var p1Points = document.getElementById("pl1"); //Display player 1 points
     var gamePoints = document.getElementById("gn"); //Display game rounds
 
+    var forColorP1 = document.getElementById("player1");
+    var forColorP2 = document.getElementById("player2");
+    
     // create alphabet ul
     var buttons = function () {
       myButtons = document.getElementById('buttons');
@@ -408,6 +411,13 @@
     p2 = 0;
     games = 1;
     play();
+    
+    if(games % 2 != 0) {
+      forColorP1.style.color = "red";
+    }
+    else {
+      forColorP2.style.color = "red";
+    }
 
     var socket = io();
     // For next player - next game
@@ -416,22 +426,11 @@
       letters.parentNode.removeChild(letters);
       context.clearRect(0, 0, 400, 400);
       answerGameOver.innerHTML = null;
-      // gamePoints.innerHTML = games;
-//       games = games + 1;
       socket.emit('gamePoints', games);
-      // p1Points.innerHTML = p1;
       socket.emit('player1Points', p1);
-      // p2Points.innerHTML = p2;
       socket.emit('player2Points', p2);
       
       play();
-    }
-    
-    if(games % 2 != 0) {
-      forColorP1.style.color = "red";
-    }
-    else {
-      forColorP2.style.color = "red";
     }
 
     socket.on('player1Points', function(x) {
