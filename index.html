@@ -422,7 +422,6 @@
 //     }
     
     var socket = io();
-
     // For next player - next game
     document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
@@ -439,13 +438,13 @@
       play();
     }
 
-    socket.on('player1Points',(x) => {
+    socket.on('player1Points', function(x) {
       p1Points.innerHTML = x;
     });
-    socket.on('player2Points',(x) => {
+    socket.on('player2Points', function(x) {
       p2Points.innerHTML = x;
     });
-    socket.on('gamePoints',(x) => {
+    socket.on('gamePoints', function(x) {
       gamePoints.innerHTML = x;
     });
     
