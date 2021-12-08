@@ -427,12 +427,16 @@
       correct.parentNode.removeChild(correct);
       letters.parentNode.removeChild(letters);
       context.clearRect(0, 0, 400, 400);
-      answerGameOver.innerHTML = null;
-      // p1Points.innerHTML = p1;
-      socket.emit('player1Points', p1);
-      // p2Points.innerHTML = p2;
-      socket.emit('player2Points', p2);
+      answerGameOver.innerHTML = null;      
       games = games + 1;
+      if(games % 2 == 0) {
+        // p2Points.innerHTML = p2;
+        socket.emit('player2Points', p2);
+      }
+      else {
+        // p1Points.innerHTML = p1;
+        socket.emit('player1Points', p1);
+      }
       // gamePoints.innerHTML = games;
       socket.emit('gamePoints', games);
       play();
