@@ -13,6 +13,10 @@ io.on('connection', function(socket){
   console.log('connection ' + socket.id + ' playerId ' + playerID);
   socket.emit('yourid', playerID);
   
+  socket.on('yourid', function(data) {
+    var num = data;
+  });
+  
   socket.on('disconnect', function (socket) {
     playerID -= 1;
   });
