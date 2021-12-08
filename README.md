@@ -2,7 +2,11 @@
 
 IT 325 – Web Development Project 2 “End Game”
 
-Deploy my game in Heroku:
+Link to my game:
+[https://hangman-game-mrc.herokuapp.com/](https://hangman-game-mrc.herokuapp.com/)
+
+
+To deploy my game in Heroku:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/mirandarcospin/socketio-mxr17e-endgame)
 
@@ -28,5 +32,6 @@ You may use jQuery for the following:
 - Any time anything new appears on the game.
 - Any time anything disappears.
 - Any AJAX calls.
+
 All pages must utilize CSS to make it look good.
 You will need to keep track of users, current games, etc. (past games?)
