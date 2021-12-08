@@ -17,18 +17,14 @@ io.on('connection', function(socket){
     playerID -= 1;
   });
   
-  socket.on('yourid', data => {
-    io.emit('yourid', data);
+  socket.on('gamePoints', data => {
+    io.emit('gamePoints', data);
   });
-
   socket.on('player1Points', data => {
     io.emit('player1Points', data);
   });
   socket.on('player2Points', data => {
     io.emit('player2Points', data);
-  });
-  socket.on('gamePoints', data => {
-    io.emit('gamePoints', data);
   });
 });
 
