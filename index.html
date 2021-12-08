@@ -411,15 +411,15 @@
     p2 = 0;
     games = 1;
     play();
-    
-    if(games % 2 != 0) {
-      forColorP1.style.color = "red";
-    }
-    else {
-      forColorP2.style.color = "red";
-    }
 
     var socket = io();
+    
+    if(games % 2 != 0) {
+      socket.emit('playerTurn', 1);
+    }
+    else if (games % 2 == 0){
+      socket.emit('playerTurn', 2);
+    }
     // For next player - next game
     document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
@@ -432,6 +432,17 @@
       
       play();
     }
+    
+    socket.on('playerTurn', function(x) {
+      if(x == 1) {
+        forColorP1.style.color = "red";
+        forColorP2.style.color = "black";
+      }
+      else if (x == 2) {
+        forColorP1.style.color = "black";
+        forColorP2.style.color = "red";
+      }
+    });
 
     socket.on('player1Points', function(x) {
       p1 = x;
