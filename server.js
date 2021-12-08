@@ -12,33 +12,28 @@ io.on('connection', function(socket){
   playerID += 1;
   console.log('connection ' + socket.id + ' playerId ' + playerID);
   socket.emit('yourid', playerID);
-
-  if(playerID % 2 != 0) {
-    socket.on('player1Points', data => {
-      io.emit('player1Points', data);
-    });
-  }
-  else if(playerID % 2 == 0){
-    socket.on('player2Points', data => {
-      io.emit('player2Points', data);
-    });
-  }
+  
   socket.on('gamePoints', data => {
     io.emit('gamePoints', data);
+    if(data % 2 != 0) {
+      if(playerID % 2 != 0) {
+        socket.on('player1Points', data => {
+          io.emit('player1Points', data);
+        });
+      }
+    }
+    else if(data % 2 == 0) {
+      if(playerID % 2 == 0){
+        socket.on('player2Points', data => {
+          io.emit('player2Points', data);
+        });
+      }
+    }
   });
   
   socket.on('disconnect', function (socket) {
     playerID -= 1;
   });
-//   socket.on('player1Points', data => {
-//     io.emit('player1Points', data);
-//   });
-//   socket.on('player2Points', data => {
-//     io.emit('player2Points', data);
-//   });
-//   socket.on('gamePoints', data => {
-//     io.emit('gamePoints', data);
-//   });
 });
 
 http.listen(port, () => {
