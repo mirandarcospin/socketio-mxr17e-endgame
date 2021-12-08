@@ -413,13 +413,6 @@
     play();
     
     var socket = io();
-
-    if(games % 2 != 0) {
-      socket.emit('playerTurn1', "red");
-    }
-    else if (games % 2 == 0) {
-      socket.emit('playerTurn2', "red");
-    }
     // For next player - next game
     document.getElementById('reset').onclick = function() {
       correct.parentNode.removeChild(correct);
@@ -429,25 +422,16 @@
       socket.emit('gamePoints', games);
       socket.emit('player1Points', p1);
       socket.emit('player2Points', p2);
-      
-      if(games % 2 != 0) {
-        socket.emit('playerTurn1', "red");
-      }
-      else if (games % 2 == 0) {
-        socket.emit('playerTurn2', "red");
-      }
-
       play();
     }
 
-    socket.on('playerTurn1', function(x) {
-      forColorP1.style.color = x;
-      forColorP2.style.color = "black";
-    });
-
-    socket.on('playerTurn2', function(x) {
-      forColorP1.style.color = "black";
-      forColorP2.style.color = x;
+    socket.on('yourid', x => {
+      if(x == 1) {
+        forColorP1.style.color = "red";
+      }
+      else {
+        forColorP2.style.color = "red";
+      }
     });
 
     socket.on('player1Points', function(x) {
