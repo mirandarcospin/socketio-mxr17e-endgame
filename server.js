@@ -10,7 +10,6 @@ app.get('/', (req, res) => {
 var playerID = 0;
 io.on('connection', function(socket){
   playerID += 1;
-  alert('You are player = ' + playerID);
   console.log('connection ' + socket.id + ' playerId ' + playerID);
   socket.emit('yourid', playerID);
   
