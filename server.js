@@ -13,28 +13,18 @@ io.on('connection', function(socket){
   console.log('connection ' + socket.id + ' playerId ' + playerID);
   socket.emit('yourid', playerID);
   
-  socket.on('gamePoints', data => {
-    x = data;
-    io.emit('gamePoints', data);
-  });
-
-  if(x % 2 != 0) {
-    if(playerID % 2 != 0) {
-      socket.on('player1Points', data => {
-        io.emit('player1Points', data);
-      });
-    }
-  }
-  else if(x % 2 == 0) {
-    if(playerID % 2 == 0){
-      socket.on('player2Points', data => {
-        io.emit('player2Points', data);
-      });
-    }
-  }
-  
   socket.on('disconnect', function (socket) {
     playerID -= 1;
+  });
+
+  socket.on('player1Points', data => {
+    io.emit('player1Points', data);
+  });
+  socket.on('player2Points', data => {
+    io.emit('player2Points', data);
+  });
+  socket.on('gamePoints', data => {
+    io.emit('gamePoints', data);
   });
 });
 
