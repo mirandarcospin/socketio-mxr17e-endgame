@@ -441,9 +441,11 @@
     }
 
     socket.on('player1Points', function(x) {
+      p1 = p1 + x;
       p1Points.innerHTML = x;
     });
     socket.on('player2Points', function(x) {
+      p2 = p2 + x;
       p2Points.innerHTML = x;
     });
     socket.on('gamePoints', function(x) {
