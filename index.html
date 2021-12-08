@@ -425,15 +425,6 @@
       play();
     }
 
-    socket.on('yourid', x => {
-      if(x == 1) {
-        forColorP1.style.color = "red";
-      }
-      else {
-        forColorP2.style.color = "red";
-      }
-    });
-
     socket.on('player1Points', function(x) {
       p1 = x;
       p1Points.innerHTML = x;
