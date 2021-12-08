@@ -16,6 +16,10 @@ io.on('connection', function(socket){
   socket.on('disconnect', function (socket) {
     playerID -= 1;
   });
+  
+  socket.on('playerTurn', data => {
+    io.emit('playerTurn', data);
+  });
 
   socket.on('player1Points', data => {
     io.emit('player1Points', data);
