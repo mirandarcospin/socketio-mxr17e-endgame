@@ -155,16 +155,6 @@
         padding-left: 20px;
         text-align: center;
       }
-      
-      #forTurn {
-        width: 100%;
-        padding: 270px 0;
-        text-align: center;
-        color: white;
-        background-color: black;
-        margin-top: 10px;
-        font-size:50px;
-      }
     </style>
   </head>
   <div class="content">
@@ -186,7 +176,6 @@
   </div>
 
   <div class="elementsDiv">
-    <div id="forTurn">Wait for your turn :)</div>
       <div class="content">
         <h3>HINT - Categories: Animals, Food, Countries</<h3>
       </div>
@@ -449,23 +438,6 @@
     socket.on('gamePoints', function(x) {
       games = x + 1;
       gamePoints.innerHTML = x + 1;
-    });
-    
-    socket.on('yourid', data => {
-      var y = document.getElementById('forTurn');
-      var num;
-      if(games % 2 != 0) {
-        num = 1;
-      }
-      else {
-        num = 2;
-      }
-      if(data == games) {
-        x.style.display = "none";
-      }
-      else {
-        x.style.display = "block";
-      }
     });
     
   </script>
