@@ -21,17 +21,19 @@ io.on('connection', function(socket){
   playerID += 1;
   console.log('connection ' + socket.id + ' playerId ' + playerID);
   socket.emit('yourid', playerID);
-  socket.on('disconnect', function () {
-    playerID--;
+
+  socket.on('disconnect', function (socket) {
+    playerID -= 1;
   });
-  socket.on('player1Points',(data) => {
-    io.emit('player1Points',(data));
+
+  socket.on('player1Points', data => {
+    io.emit('player1Points', data);
   });
-  socket.on('player2Points',(data) => {
-    io.emit('player2Points',(data));
+  socket.on('player2Points', data => {
+    io.emit('player2Points', data);
   });
-  socket.on('gamePoints',(data) => {
-    io.emit('gamePoints',(data));
+  socket.on('gamePoints', data => {
+    io.emit('gamePoints', data);
   });
 });
 
