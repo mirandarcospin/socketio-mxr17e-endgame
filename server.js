@@ -26,10 +26,6 @@ io.on('connection', function(socket){
   socket.on('player2Points', data => {
     io.emit('player2Points', data);
   });
-  
-   socket.on('send to server',function(data){ 
-    socket.broadcast('notification', 'You are player ' + playerID);
-  });
 });
 
 http.listen(port, () => {
