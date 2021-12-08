@@ -426,6 +426,13 @@
       
       play();
     }
+    
+    if(games % 2 != 0) {
+      forColorP1.style.color = "red";
+    }
+    else {
+      forColorP2.style.color = "red";
+    }
 
     socket.on('player1Points', function(x) {
       p1 = x;
@@ -435,14 +442,7 @@
       p2 = x;
       p2Points.innerHTML = x;
     });
-    socket.on('gamePoints', function(x) {
-      if(games % 2 != 0) {
-        forColorP1.style.color = "red";
-      }
-      else {
-        forColorP2.style.color = "red";
-      }
-      
+    socket.on('gamePoints', function(x) {     
       games = x + 1;
       gamePoints.innerHTML = x + 1;
     });
