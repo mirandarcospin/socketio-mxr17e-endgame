@@ -17,11 +17,8 @@ io.on('connection', function(socket){
     playerID -= 1;
   });
   
-  socket.on('playerTurn1', data => {
-    io.emit('playerTurn1', data);
-  });
-  socket.on('playerTurn2', data => {
-    io.emit('playerTurn2', data);
+  socket.on('yourid', data => {
+    io.emit('yourid', data);
   });
 
   socket.on('player1Points', data => {
