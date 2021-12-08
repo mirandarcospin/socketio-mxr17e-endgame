@@ -436,6 +436,15 @@
       p2Points.innerHTML = x;
     });
     socket.on('gamePoints', function(x) {
+      if(games % 2 != 0) {
+        var forColorP1 = document.getElementById("player1");
+        forColorP1.style.color = "red";
+      }
+      else {
+        var forColorP2 = document.getElementById("player2");
+        forColorP2.style.color = "red";
+      }
+      
       games = x + 1;
       gamePoints.innerHTML = x + 1;
     });
