@@ -430,7 +430,7 @@
       context.clearRect(0, 0, 400, 400);
       answerGameOver.innerHTML = null;
       // gamePoints.innerHTML = games;
-      games = games + 1;
+//       games = games + 1;
       socket.emit('gamePoints', games);
       // p1Points.innerHTML = p1;
       socket.emit('player1Points', p1);
@@ -448,7 +448,8 @@
     });
     socket.on('gamePoints', function(x) {
       games = x + 1;
-      gamePoints.innerHTML = x;
+      gamePoints.innerHTML = x + 1;
+//       gamePoints.innerHTML = x;
     });
     
   </script>
