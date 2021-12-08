@@ -211,7 +211,6 @@
     var points; //Amount of points to be earned
     var p1; //Player 1
     var p2; //Player 2
-    var l;
 
     // Get elements
     var showLives = document.getElementById("stickmanLives");
@@ -411,15 +410,14 @@
     p1 = 0;
     p2 = 0;
     games = 1;
-    l = 1;
     play();
     
     var socket = io();
 
-    if(l % 2 != 0) {
+    if(games % 2 != 0) {
       socket.emit('playerTurn1', "red");
     }
-    else if (l % 2 == 0) {
+    else if (games % 2 == 0) {
       socket.emit('playerTurn2', "red");
     }
     // For next player - next game
@@ -431,6 +429,13 @@
       socket.emit('gamePoints', games);
       socket.emit('player1Points', p1);
       socket.emit('player2Points', p2);
+      
+      if(games % 2 != 0) {
+        socket.emit('playerTurn1', "red");
+      }
+      else if (games % 2 == 0) {
+        socket.emit('playerTurn2', "red");
+      }
 
       play();
     }
@@ -455,7 +460,6 @@
     });
     socket.on('gamePoints', function(x) {
       games = x + 1;
-      l = games;
       gamePoints.innerHTML = x + 1;
     });
         
